@@ -1,0 +1,31 @@
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "capstone-crs-api.vercel.app",
+        "EXPO_PUBLIC_API_KEY": "AIzaSyDJB-bymQaBnc7652spVsgk3XECtseOB4o",
+        "EXPO_PUBLIC_AUTH_DOMAIN": "crime-reporting-system-2b1ea.firebaseapp.com",
+        "EXPO_PUBLIC_PROJECT_ID": "crime-reporting-system-2b1ea",
+        "EXPO_PUBLIC_STORAGE_BUCKET": "crime-reporting-system-2b1ea.appspot.com",
+        "EXPO_PUBLIC_MESSAGING_SENDER_ID": "6779483996",
+        "EXPO_PUBLIC_APP_ID": "1:6779483996:web:21c81d2b43bda740b5b399",
+        "EXPO_PUBLIC_MEASUREMENT_ID": "G-HJ2QQ64DJK"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "preview4": {
+      "distribution": "internal"
+    },
+    "production": {}
+  }
+}
