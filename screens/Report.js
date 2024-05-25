@@ -54,9 +54,9 @@ function validateReport(report) {
   }
 
   // Validate description: Ensure it's not empty
-  if (!report.description || report.description.trim() === "") {
-    errors.description = "Description is required.";
-  }
+  // if (!report.description || report.description.trim() === "") {
+  //   errors.description = "Description is required.";
+  // }
 
   return {
     isValid: Object.keys(errors).length === 0,
@@ -73,7 +73,6 @@ export default function Report() {
     type: "robbery",
     photoURL: [],
     videoURL: "",
-    description: "",
     location: {
       street: "Akasia",
       barangay: "Pantal",
@@ -84,7 +83,7 @@ export default function Report() {
     numberOfInjuries: 0,
     injurySeverity: "Minor",
     userId: authCtx.user.uid,
-    action_status: "Pending",
+    action_status: "Under Investigation",
   };
 
   const [reportDetails, setReportDetails] = useState(defaultReportDetails);
@@ -155,7 +154,7 @@ export default function Report() {
       })
     );
 
-    return videoUrls[0];
+    return videoUrls[0] ?? "";
   };
 
   const submitHandler = async () => {
@@ -174,6 +173,8 @@ export default function Report() {
     try {
       reportDetails.photoURL = await uploadImages(images, authCtx.user.uid);
       reportDetails.videoURL = await uploadVideos(videos, authCtx.user.uid);
+      console.log(JSON.stringify(reportDetails, null, 2));
+
       const { data } = await axios({
         method: "post",
         url: `https://${process.env.EXPO_PUBLIC_API_URL}/api/reports/`,
