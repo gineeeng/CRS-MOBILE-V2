@@ -74,45 +74,75 @@ export default function ChangeEmailModal({ show, setShow }) {
 
   return (
     <Modal visible={show} animationType="slide">
-      <TouchableOpacity
-        style={{ alignSelf: "flex-end", marginVertical: 12, marginRight: 18 }}
-        onPress={() => setShow(false)}
-      >
-        <AntDesign name="down" size={24} color="black" />
-      </TouchableOpacity>
-
-      <View style={{ padding: 18, gap: 8 }}>
-        <Text>
-          You are about to change your email address. To ensure the security of
-          your account, you will be logged out immediately after the change.
-        </Text>
-        <Text>
-          To continue using your account, please log in with your new email
-          address. If your new email address is not verified yet, a verification
-          email will be sent to it upon login. Please follow the instructions in
-          the email to verify your new address.
-        </Text>
-
-        <TextInput
-          style={[styles.textInput, inputStyle]}
-          placeholder="Enter your new email"
-          placeholderTextColor="grey"
-          onChangeText={setNewEmail}
-          editable={!isSubmitting}
-        />
-        <TextInput
-          secureTextEntry
-          style={[styles.textInput, inputStyle]}
-          placeholder="Enter current password"
-          placeholderTextColor="grey"
-          onChangeText={setPassword}
-          editable={!isSubmitting}
-        />
-        <Button
-          title={isSubmitting ? "Submitting..." : "Submit"}
-          onPress={onSubmit}
-          disabled={isSubmitting || !validateEmail(newEmail) || password === ""}
-        />
+      <View style={{ backgroundColor: colors.bgPrimary, flex: 1 }}>
+        <TouchableOpacity
+          style={{ alignSelf: "flex-end", marginVertical: 12, marginRight: 18 }}
+          onPress={() => setShow(false)}
+        >
+          <AntDesign name="down" size={24} color={colors.textColor} />
+        </TouchableOpacity>
+        <View style={{ padding: 18, gap: 8 }}>
+          <Text style={{ color: colors.textColor }}>
+            You are about to change your email address. To ensure the security
+            of your account, you will be logged out immediately after the
+            change.
+          </Text>
+          <Text style={{ color: colors.textColor }}>
+            To continue using your account, please log in with your new email
+            address. If your new email address is not verified yet, a
+            verification email will be sent to it upon login. Please follow the
+            instructions in the email to verify your new address.
+          </Text>
+          <TextInput
+            style={[
+              styles.textInput,
+              inputStyle,
+              {
+                backgroundColor: colors.inputBgColor,
+                borderColor: colors.inputBorderColor,
+                color: colors.textColor,
+              },
+            ]}
+            placeholder="Enter your new email"
+            placeholderTextColor="grey"
+            onChangeText={setNewEmail}
+            editable={!isSubmitting}
+          />
+          <TextInput
+            secureTextEntry
+            style={[
+              styles.textInput,
+              inputStyle,
+              {
+                backgroundColor: colors.inputBgColor,
+                borderColor: colors.inputBorderColor,
+                color: colors.textColor,
+              },
+            ]}
+            placeholder="Enter current password"
+            placeholderTextColor="grey"
+            onChangeText={setPassword}
+            editable={!isSubmitting}
+          />
+          <TouchableOpacity
+            style={[
+              styles.submitBtnContainer,
+              {
+                opacity: !validateEmail(newEmail) || password === "" ? 0.4 : 1,
+              },
+            ]}
+            onPress={onSubmit}
+            disabled={
+              isSubmitting || !validateEmail(newEmail) || password === ""
+            }
+          >
+            {isSubmitting ? (
+              <ActivityIndicator color={colors.textColor} size="small" />
+            ) : (
+              <Text style={styles.submitBtnText}>Submit</Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
@@ -127,5 +157,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingVertical: 2,
     paddingHorizontal: 4,
+  },
+  submitBtnContainer: {
+    backgroundColor: Colors.buttonBackgroundColor,
+    paddingVertical: 8,
+    borderRadius: 4,
+  },
+  submitBtnText: {
+    textAlign: "center",
+    color: "white",
   },
 });

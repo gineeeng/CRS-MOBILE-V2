@@ -24,14 +24,15 @@ export default function AuthButton({ title, pressHandler }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.accent400,
+    backgroundColor: "#eab308",
     paddingVertical: 8,
     borderRadius: 4,
     marginTop: 20,
   },
   buttonText: {
     textAlign: "center",
-    color: "white",
+    color: "#4d7c0f",
+    fontWeight: "bold",
   },
   press: {
     opacity: 0.5,

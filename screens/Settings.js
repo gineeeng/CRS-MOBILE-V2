@@ -18,6 +18,7 @@ import axios from "axios";
 import ChangeEmailModal from "../components/settings/ChangeEmailModal";
 import { ThemeContext } from "../context/themeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ChangePasswordModal from "../components/settings/ChangePasswordModal";
 
 export default function Settings() {
   const { user } = useContext(AuthContext);
@@ -31,6 +32,7 @@ export default function Settings() {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [showChangeEmailModal, setShowChangeEmailModal] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   async function getUserInfo() {
     try {
@@ -299,7 +301,12 @@ export default function Settings() {
               >
                 <Text style={styles.submitBtnText}>Change Email</Text>
               </TouchableOpacity>
-              {/* <Button title="Change Password" /> */}
+              <TouchableOpacity
+                style={[styles.submitBtnContainer]}
+                onPress={() => setShowChangePasswordModal(true)}
+              >
+                <Text style={styles.submitBtnText}>Change Password</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={{ marginTop: 38 }}>
@@ -323,7 +330,10 @@ export default function Settings() {
               }}
             >
               <Switch
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
+                trackColor={{
+                  false: "#767577",
+                  true: Colors.buttonTextColor,
+                }}
                 thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
@@ -340,6 +350,10 @@ export default function Settings() {
       <ChangeEmailModal
         show={showChangeEmailModal}
         setShow={setShowChangeEmailModal}
+      />
+      <ChangePasswordModal
+        show={showChangePasswordModal}
+        setShow={setShowChangePasswordModal}
       />
     </View>
   );
@@ -358,13 +372,13 @@ const styles = StyleSheet.create({
   textInputLabel: { fontSize: 16, fontWeight: "bold", marginBottom: 4 },
   disabledText: { color: "#d3d3d3" },
   submitBtnContainer: {
-    backgroundColor: Colors.accent400,
+    backgroundColor: Colors.buttonBackgroundColor,
     paddingVertical: 8,
     borderRadius: 4,
-    marginTop: 20,
   },
   submitBtnText: {
     textAlign: "center",
-    color: "white",
+    color: Colors.buttonTextColor,
+    fontWeight: "bold",
   },
 });

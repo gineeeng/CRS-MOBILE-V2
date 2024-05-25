@@ -1,5 +1,6 @@
 export const Colors = {
-  primary400: "#25383c",
+  // primary400: "#25383c",
+  primary400: "#4d7c0f",
   bgDark: "#1d232a",
   textColor: "#a6adba",
   inputBgColor: "#3b3b3b",
@@ -7,6 +8,8 @@ export const Colors = {
   accent400: "#3b82f6",
   error400: "#fc5656",
   bgError: "#ffcec7",
+  buttonBackgroundColor: "#eab308",
+  buttonTextColor: "#4d7c0f",
 };
 
 export const lightTheme = {
@@ -17,7 +20,7 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  bgPrimary: "#1d232a",
+  bgPrimary: "#191919",
   textColor: "white",
   inputBgColor: "#3b3b3b",
   inputBorderColor: "#757575",

@@ -6,7 +6,10 @@ export default function AuthNavigator({ text, name, pressHandler }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        {text} <Text style={styles.link} onPress={pressHandler}>{name}</Text>
+        {text}{" "}
+        <Text style={styles.link} onPress={pressHandler}>
+          {name}
+        </Text>
       </Text>
     </View>
   );
@@ -19,6 +22,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   link: {
-    color: Colors.accent400,
+    color: "#4d7c0f",
   },
 });

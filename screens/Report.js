@@ -390,13 +390,14 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   submitBtnContainer: {
-    backgroundColor: Colors.accent400,
+    backgroundColor: Colors.buttonBackgroundColor,
     paddingVertical: 8,
     borderRadius: 4,
     marginTop: 20,
   },
   submitBtnText: {
     textAlign: "center",
-    color: "white",
+    color: Colors.buttonTextColor,
+    fontWeight: "bold",
   },
 });
