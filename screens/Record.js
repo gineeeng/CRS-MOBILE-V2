@@ -79,7 +79,7 @@ export default function Record() {
     setInterval(() => {
       console.log("refetch");
       getReportsHistory();
-    }, 100000);
+    }, 2000);
 
     // console.log(user.uid);
     // console.log("Connecting to WebSocket...");
