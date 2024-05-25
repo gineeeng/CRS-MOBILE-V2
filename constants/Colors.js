@@ -8,3 +8,19 @@ export const Colors = {
   error400: "#fc5656",
   bgError: "#ffcec7",
 };
+
+export const lightTheme = {
+  bgPrimary: "white",
+  textColor: "black",
+  inputBgColor: "#f9fafb",
+  inputBorderColor: "#d1d5db",
+};
+
+export const darkTheme = {
+  bgPrimary: "#1d232a",
+  textColor: "white",
+  inputBgColor: "#3b3b3b",
+  inputBorderColor: "#757575",
+  disabledTextColor: "grey",
+  placeholderColor: "grey",
+};

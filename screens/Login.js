@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { Colors } from "../constants/Colors";
 import { statusBarHeight } from "../constants/DeviceSizes";
 
 import AuthField from "../components/authentication/AuthField";
@@ -10,10 +9,13 @@ import AuthNavigator from "../components/authentication/AuthNavigator";
 import AuthHeader from "../components/authentication/AuthHeader";
 import { AuthContext } from "../context/authContext";
 import { authError } from "../util/validateCredentials";
+import { ThemeContext } from "../context/themeContext";
 
 export default function Login({ navigation }) {
-
   const { login, setAuthenticating } = useContext(AuthContext);
+
+  const { colors } = useContext(ThemeContext);
+
   const [userInput, setUserInput] = useState({
     email: "",
     password: "",
@@ -26,16 +28,17 @@ export default function Login({ navigation }) {
   const loginHandler = async () => {
     setAuthenticating(true);
     try {
-      await login(userInput.email, userInput.password);
+      const { user } = await login(userInput.email, userInput.password);
+      console.log(user);
     } catch (error) {
-      Alert.alert("Can't log you in",authError(error.code));
-      console.log(error.code)
+      Alert.alert("Can't log you in", authError(error.code));
+      console.log(error.code);
       setAuthenticating(false);
     }
   };
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { backgroundColor: colors.bgPrimary }]}>
       <ScrollView>
         <AuthHeader text="Login" />
         <View style={styles.controlls}>
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     paddingTop: statusBarHeight + 10,
     paddingHorizontal: 20,
     flex: 1,
-    backgroundColor: Colors.primary400,
+    // backgroundColor: Colors.primary400,
   },
   controlls: {
     gap: 10,

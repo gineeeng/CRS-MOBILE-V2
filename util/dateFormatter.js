@@ -8,3 +8,7 @@ export function fromatInputDate(originalDateString) {
     console.log(error);
   }
 }
+
+export function formatDateReport(date) {
+  return format(new Date(date), "MMMM d, yyyy, h:mm a");
+}

@@ -1,5 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, StyleSheet, View, ScrollView, Alert } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  View,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  TextInput,
+} from "react-native";
 import { AuthContext } from "../context/authContext";
 import { Colors } from "../constants/Colors";
 import axios from "axios";
@@ -29,9 +39,35 @@ import Uploads from "../components/report/upload_preview/Uploads";
 import CrimeDropdown from "../components/report/CrimeDropdown";
 import VideoPreview from "../components/report/VideoPreview";
 import InfoTooltip from "../components/report/InfoTooltip";
+import ValidationMessage from "../components/authentication/ValidationMessage";
+import { ThemeContext } from "../context/themeContext";
+import InputField from "../components/report/InputField";
+
+function validateReport(report) {
+  const errors = {};
+
+  // Validate date: Ensure it's not empty and is a valid date
+  if (!report.date) {
+    errors.date = "Date is required.";
+  } else if (isNaN(Date.parse(report.date))) {
+    errors.date = "Date is invalid.";
+  }
+
+  // Validate description: Ensure it's not empty
+  if (!report.description || report.description.trim() === "") {
+    errors.description = "Description is required.";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
 
 export default function Report() {
   const authCtx = useContext(AuthContext);
+  const { colors } = useContext(ThemeContext);
+
   const defaultReportDetails = {
     reportType: "Crime",
     type: "robbery",
@@ -39,7 +75,7 @@ export default function Report() {
     videoURL: "",
     description: "",
     location: {
-      street: "",
+      street: "Akasia",
       barangay: "Pantal",
       municipality: "Dagupan City",
     },
@@ -50,7 +86,9 @@ export default function Report() {
     userId: authCtx.user.uid,
     action_status: "Pending",
   };
+
   const [reportDetails, setReportDetails] = useState(defaultReportDetails);
+  const [errors, setErrors] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState([]);
@@ -121,7 +159,17 @@ export default function Report() {
   };
 
   const submitHandler = async () => {
+    setErrors(null);
     setIsSubmitting(true);
+
+    const { isValid, errors } = validateReport(reportDetails);
+
+    if (!isValid) {
+      setErrors(errors);
+      setIsSubmitting(false);
+
+      return;
+    }
 
     try {
       reportDetails.photoURL = await uploadImages(images, authCtx.user.uid);
@@ -182,6 +230,15 @@ export default function Report() {
             listen={reportDetails.reportType}
           />
         );
+      case "Others":
+        return (
+          <InputField
+            keyName={"type"}
+            label={"Please specify your report."}
+            placeholder="Enter your report"
+            onChangeHandler={onChangeHandler}
+          />
+        );
     }
   }
 
@@ -200,8 +257,8 @@ export default function Report() {
   }, [reportDetails]);
 
   return (
-    <ScrollView style={{ paddingTop: 25, backgroundColor: Colors.bgDark }}>
-      <View style={styles.rootConainer}>
+    <ScrollView style={{ paddingTop: 25, backgroundColor: colors.bgPrimary }}>
+      <View style={[styles.rootConainer]}>
         <Dropdown
           label="Report Type"
           options={reportType}
@@ -219,7 +276,7 @@ export default function Report() {
             />
           )}
         <Accident onChangeHandler={onChangeHandler} />
-        <TextArea label="Description" onChangeHanlder={onChangeHandler} />
+        {/* <TextArea label="Description" onChangeHanlder={onChangeHandler} /> */}
         <View>
           <Dropdown
             label="Barangay"
@@ -282,19 +339,33 @@ export default function Report() {
           isLoading={isUploadingVideos}
           label="videos uploaded"
         />
-
         <VideoPreview
           videoUri={videos[0]}
           setVideos={setVideos}
           setPreview={setVideoPreview}
           setLoading={setIsUploadingVideos}
         />
-        <View style={{ marginVertical: 12 }}>
-          <Button
+        {errors && <ValidationMessage errors={errors} />}
+        <View style={{ marginVertical: 12, marginTop: -8 }}>
+          <TouchableOpacity
+            style={[
+              styles.submitBtnContainer,
+              { opacity: isSubmitting ? 0.7 : 1 },
+            ]}
+            onPress={submitHandler}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <ActivityIndicator color="white" size="small" />
+            ) : (
+              <Text style={styles.submitBtnText}>Submit</Text>
+            )}
+          </TouchableOpacity>
+          {/* <Button
             title={isSubmitting ? "submitting..." : "SUBMIT"}
             disabled={isSubmitting}
             onPress={submitHandler}
-          />
+          /> */}
         </View>
       </View>
     </ScrollView>
@@ -317,5 +388,15 @@ const styles = StyleSheet.create({
   uploadBtn: {
     marginVertical: 8,
     gap: 16,
+  },
+  submitBtnContainer: {
+    backgroundColor: Colors.accent400,
+    paddingVertical: 8,
+    borderRadius: 4,
+    marginTop: 20,
+  },
+  submitBtnText: {
+    textAlign: "center",
+    color: "white",
   },
 });

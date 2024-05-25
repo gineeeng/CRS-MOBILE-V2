@@ -1,4 +1,10 @@
-export const reportType = ["Crime", "Accident", "Hazards", "Arson/Fire"];
+export const reportType = [
+  "Crime",
+  "Accident",
+  "Hazards",
+  "Arson/Fire",
+  "Others",
+];
 export const severityLevels = ["Minor", "Moderate", "Severe"];
 
 export const crimes = [
@@ -15,7 +21,6 @@ export const crimes = [
   "Identity Theft",
   "Drug Trafficking",
   "Domestic Violence",
-  "Arson",
   "Carjacking",
   "Forgery",
   "Human Trafficking",
@@ -39,36 +44,7 @@ export const murderTypes = [
   "Child Abuse-related Murder",
 ];
 
-export const locationOptions = [
-  "Pantal",
-  "Bacayao Norte",
-  "Bacayao Sur",
-  "Bolosan",
-  "Bonuan Binloc",
-  "Bonuan Boquig",
-  "Bonuan Gueset",
-  "Calmay",
-  "Carael",
-  "Caranglaan",
-  "Herrero",
-  "Lasip Chico",
-  "Lasip Grande",
-  "Lomboy",
-  "Lucao",
-  "Malued",
-  "Mamalingling",
-  "Mangin",
-  "Mayombo",
-  "Poblacion Oeste",
-  "Pogo Chico",
-  "Pogo Grande",
-  "Pugaro Suit",
-  "Salapingao",
-  "Salisay",
-  "Tambac",
-  "Tapuac",
-  "Tebeng",
-];
+export const locationOptions = ["Pantal"];
 
 export const accidentTypes = [
   "Car accidents",

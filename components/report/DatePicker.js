@@ -3,47 +3,64 @@ import { Colors } from "../../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import { fromatInputDate } from "../../util/dateFormatter";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useState } from "react";
-import { format } from "date-fns";
+import { useContext, useState } from "react";
+import { format, parseISO } from "date-fns";
+import { ThemeContext } from "../../context/themeContext";
 
 export default function DatePicker({ keyName, setUserInput }) {
+  const { colors } = useContext(ThemeContext);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const [dateValue, setDateValue] = useState("dd/mm/yyyy");
-  const [timeValue, setTimeValue] = useState("h:mm a");
+  const [dateValue, setDateValue] = useState(new Date());
+
+  const [dateTime, setDateTime] = useState("");
 
   const onChangeDateHandler = (event, selectedDate) => {
     setShowDatePicker(false);
+    console.log(selectedDate);
     if (event.type === "set") {
-      const formattedDate = fromatInputDate(selectedDate);
-      setDateValue(formattedDate);
-      setUserInput((prev) => ({
-        ...prev,
-        [keyName]: selectedDate,
-      }));
+      setDateValue(selectedDate);
+      setShowTimePicker(true);
     }
   };
 
   const onChangeTimeHanlder = (event, selectedTime) => {
     setShowTimePicker(false);
+
     if (event.type === "set") {
-      console.log(selectedTime);
-      const formattedTime = format(selectedTime, "h:mm a");
-      setTimeValue(formattedTime);
+      const datePart = dateValue.toISOString().split("T")[0];
+      const timePart = selectedTime.toISOString().split("T")[1];
+
+      const finalDate = parseISO(`${datePart}T${timePart}`);
+      setDateTime(format(finalDate, "MMMM dd, yyyy, hh:mm a"));
+      console.log(finalDate);
+
+      setUserInput((prev) => ({
+        ...prev,
+        [keyName]: finalDate,
+      }));
     }
   };
 
   return (
-    <View>
-      <Text style={styles.label}>Date</Text>
+    <View style={{ marginTop: 16 }}>
+      <Text style={styles.label}>When did the incident occur?</Text>
       <View style={styles.container}>
         <Pressable
-          style={styles.dateInput}
+          style={[styles.dateInput, { backgroundColor: colors.inputBgColor }]}
           onPress={() => setShowDatePicker(true)}
         >
-          <Text style={styles.dateValue}>{dateValue}</Text>
-          <Entypo name="calendar" size={24} color="white" />
+          <Text
+            style={[
+              styles.dateValue,
+              { opacity: dateTime ? 1 : 0.5, color: colors.textColor },
+            ]}
+          >
+            {dateTime ? dateTime : "Tap to select date"}
+          </Text>
+          <Entypo name="calendar" size={24} color={colors.textColor} />
         </Pressable>
         {showDatePicker && (
           <DateTimePicker
@@ -53,15 +70,6 @@ export default function DatePicker({ keyName, setUserInput }) {
             onChange={onChangeDateHandler}
           />
         )}
-        <Pressable
-          style={styles.dateInput}
-          onPress={() => setShowTimePicker(true)}
-        >
-          <Text style={styles.dateValue}>
-            {timeValue} <Text style={{ color: "grey" }}>(optional)</Text>
-          </Text>
-          <Entypo name="clock" size={24} color="white" />
-        </Pressable>
         {showTimePicker && (
           <DateTimePicker
             value={new Date()}

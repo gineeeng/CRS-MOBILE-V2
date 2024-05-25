@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import { Colors } from "../../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../../context/themeContext";
 
 export default function AuthField({
   label,
@@ -22,11 +23,12 @@ export default function AuthField({
   placeholder = "",
   addressFormat = "",
 }) {
+  const { colors } = useContext(ThemeContext);
   const [showPassword, setShowPassword] = useState(false);
   return (
     <Pressable style={styles.container} onPress={pressHanlder}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>
+        <Text style={[styles.label, { color: colors.textColor }]}>
           {label}{" "}
           {addressFormat && (
             <Text style={styles.addressFormat}>{addressFormat}</Text>
@@ -35,7 +37,10 @@ export default function AuthField({
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TextInput
-          style={[styles.textInput]}
+          style={[
+            styles.textInput,
+            { backgroundColor: colors.inputBgColor, color: colors.textColor },
+          ]}
           value={value}
           autoCapitalize="none"
           secureTextEntry={isPasswordField && !showPassword}
@@ -80,7 +85,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    color: "#99adba",
+    // color: "#99adba",
+    color: "black",
   },
   addressFormat: {
     fontSize: 12,
@@ -92,10 +98,13 @@ const styles = StyleSheet.create({
     marginVertical: -5,
   },
   textInput: {
-    backgroundColor: Colors.inputBgColor,
+    // backgroundColor: Colors.inputBgColor,
+    // color: "white",
+    // borderColor: "white",
+    borderColor: "#d1d5db",
+    color: "black",
+    backgroundColor: "#f9fafb",
     fontSize: 15,
-    color: "white",
-    borderColor: "white",
     borderWidth: 1,
     borderRadius: 4,
     paddingVertical: 2,

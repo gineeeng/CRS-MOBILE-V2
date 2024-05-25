@@ -2,7 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../../constants/Colors";
 import SelectDropdown from "react-native-select-dropdown";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "../../context/themeContext";
 
 export default function Dropdown({
   label,
@@ -11,12 +12,14 @@ export default function Dropdown({
   keyName,
   subKey = "",
 }) {
+  const { colors } = useContext(ThemeContext);
+
   useEffect(() => {
     onChangeHandler(keyName, options[0], subKey);
   }, []);
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: colors.textColor }]}>{label}</Text>
       <SelectDropdown
         defaultValue={options[0]}
         data={options}
@@ -25,10 +28,20 @@ export default function Dropdown({
           onChangeHandler(keyName, selectedItem, subKey);
         }}
         renderDropdownIcon={() => (
-          <MaterialIcons name="keyboard-arrow-down" size={24} color="white" />
+          <MaterialIcons
+            name="keyboard-arrow-down"
+            size={24}
+            color={colors.textColor}
+          />
         )}
-        buttonStyle={styles.dropdown}
-        buttonTextStyle={{ color: "white", textTransform: "capitalize" }}
+        buttonStyle={[
+          styles.dropdown,
+          { backgroundColor: colors.inputBgColor },
+        ]}
+        buttonTextStyle={{
+          color: colors.textColor,
+          textTransform: "capitalize",
+        }}
         dropdownStyle={{ borderRadius: 8 }}
         rowStyle={{ borderWidth: 3, borderColor: "white" }}
         rowTextStyle={{ textTransform: "capitalize" }}

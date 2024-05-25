@@ -1,16 +1,25 @@
 import { StyleSheet, TextInput, View, Text } from "react-native";
 import { Colors } from "../../constants/Colors";
+import { useContext } from "react";
+import { ThemeContext } from "../../context/themeContext";
 
 export default function TextArea({ label, onChangeHanlder }) {
+  const { colors } = useContext(ThemeContext);
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
-        style={styles.textInput}
+        style={[
+          styles.textInput,
+          { backgroundColor: colors.inputBgColor, color: colors.textColor },
+        ]}
         multiline={true}
         onChangeText={(enteredValue) =>
           onChangeHanlder("description", enteredValue)
         }
+        placeholder="Description"
+        placeholderTextColor={colors.placeholderColor}
       />
     </View>
   );

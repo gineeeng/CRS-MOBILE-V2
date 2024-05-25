@@ -1,3 +1,5 @@
+import { parseISO, isValid, differenceInYears } from "date-fns";
+
 export const validateSignupCredentials = (values, setErrors) => {
   const errors = {};
   const phoneNumberRegex = /^09\d{9}$/;
@@ -14,8 +16,15 @@ export const validateSignupCredentials = (values, setErrors) => {
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
     errors.email = "Invalid email format";
   }
+
   if (!values.birthday) {
     errors.birthday = "Birthdate is required";
+  } else {
+    const age = differenceInYears(new Date(), values.birthday);
+
+    if (age < 16) {
+      errors.birthday = "Your must be 16 years old or older.";
+    }
   }
 
   if (!values.address.street.trim()) {

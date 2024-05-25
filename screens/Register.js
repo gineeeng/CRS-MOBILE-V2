@@ -22,9 +22,12 @@ import SelectDropdown from "react-native-select-dropdown";
 import { locationOptions } from "../util/reportData";
 import { AntDesign } from "@expo/vector-icons";
 import ValidationMessage from "../components/authentication/ValidationMessage";
+import { ThemeContext } from "../context/themeContext";
 
 export default function Register({ navigation }) {
   const authCtx = useContext(AuthContext);
+  const { colors } = useContext(ThemeContext);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errors, setErrors] = useState(null);
   const [birthdate, setBrithDate] = useState("");
@@ -41,7 +44,7 @@ export default function Register({ navigation }) {
     lastName: "",
     profilePic: "",
     email: "",
-    birthday: "dd/mm/yyyy",
+    birthday: "",
     sex: "",
     contact_no: "",
     password: "",
@@ -84,7 +87,9 @@ export default function Register({ navigation }) {
           userDetail.email,
           userDetail.password
         );
+
         userDetail.id = uid;
+        console.log("register: ", uid);
 
         const data = await axios({
           method: "post",
@@ -93,6 +98,7 @@ export default function Register({ navigation }) {
           headers: { "Content-Type": "application/json" },
         });
 
+        navigation.replace("Verification");
         console.log(data.status);
       } catch (error) {
         console.log(error);
@@ -104,7 +110,7 @@ export default function Register({ navigation }) {
   };
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { backgroundColor: colors.bgPrimary }]}>
       <ScrollView style={{ marginBottom: 16 }}>
         <View style={styles.container}>
           <AuthHeader text="Registration" />
@@ -151,15 +157,15 @@ export default function Register({ navigation }) {
                 <SelectDropdown
                   data={["Male", "Female"]}
                   buttonStyle={{
-                    backgroundColor: Colors.inputBgColor,
-                    borderColor: "white",
+                    backgroundColor: colors.inputBgColor,
+                    borderColor: colors.inputBorderColor,
                     borderWidth: 1,
                     borderRadius: 4,
                     height: 34,
                     width: 170,
                   }}
                   buttonTextStyle={{
-                    color: "white",
+                    color: colors.textColor,
                     fontSize: 14,
                   }}
                   dropdownStyle={{
@@ -175,7 +181,7 @@ export default function Register({ navigation }) {
                   }}
                   defaultButtonText="Select Identity"
                   renderDropdownIcon={() => (
-                    <AntDesign name="down" size={14} color="white" />
+                    <AntDesign name="down" size={14} color={colors.textColor} />
                   )}
                   onSelect={(value) => onChangeUserInputHandler("sex", value)}
                 />
@@ -207,8 +213,8 @@ export default function Register({ navigation }) {
                   ]}
                   defaultButtonText="Select Street/Sitio"
                   buttonStyle={{
-                    backgroundColor: Colors.inputBgColor,
-                    borderColor: "white",
+                    backgroundColor: colors.inputBgColor,
+                    borderColor: colors.inputBorderColor,
                     borderWidth: 1,
                     borderRadius: 4,
                     height: 34,
@@ -216,7 +222,7 @@ export default function Register({ navigation }) {
                     marginTop: 32,
                   }}
                   buttonTextStyle={{
-                    color: "white",
+                    color: colors.textColor,
                     fontSize: 14,
                     textTransform: "capitalize",
                   }}
@@ -233,7 +239,7 @@ export default function Register({ navigation }) {
                     borderRadius: 8,
                   }}
                   renderDropdownIcon={() => (
-                    <AntDesign name="down" size={14} color="white" />
+                    <AntDesign name="down" size={14} color={colors.textColor} />
                   )}
                   onSelect={(value) => onChangeAddress("street", value)}
                 />
@@ -241,8 +247,8 @@ export default function Register({ navigation }) {
                   data={locationOptions}
                   defaultButtonText="Select Barangay"
                   buttonStyle={{
-                    backgroundColor: Colors.inputBgColor,
-                    borderColor: "white",
+                    backgroundColor: colors.inputBgColor,
+                    borderColor: colors.inputBorderColor,
                     borderWidth: 1,
                     borderRadius: 4,
                     height: 34,
@@ -250,7 +256,7 @@ export default function Register({ navigation }) {
                     marginTop: 32,
                   }}
                   buttonTextStyle={{
-                    color: "white",
+                    color: colors.textColor,
                     fontSize: 14,
                   }}
                   dropdownStyle={{
@@ -265,7 +271,7 @@ export default function Register({ navigation }) {
                     borderRadius: 8,
                   }}
                   renderDropdownIcon={() => (
-                    <AntDesign name="down" size={14} color="white" />
+                    <AntDesign name="down" size={14} color={colors.textColor} />
                   )}
                   onSelect={(value) => onChangeAddress("barangay", value)}
                 />

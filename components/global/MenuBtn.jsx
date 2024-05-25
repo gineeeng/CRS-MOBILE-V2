@@ -9,9 +9,11 @@ import {
 import { AuthContext } from "../../context/authContext";
 import { Colors } from "../../constants/Colors";
 import { Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function MenuBtn() {
   const { logout } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   return (
     <Menu>
@@ -24,6 +26,21 @@ export default function MenuBtn() {
           optionText: { color: Colors.primary400 },
         }}
       >
+        <MenuOption
+          onSelect={() => navigation.navigate("Settings")}
+          children={
+            <View
+              style={{ flexDirection: "row", gap: 6, alignItems: "center" }}
+            >
+              <MaterialIcons
+                name="settings"
+                size={24}
+                color={Colors.primary400}
+              />
+              <Text style={{ color: Colors.primary400 }}>Settings</Text>
+            </View>
+          }
+        />
         <MenuOption
           onSelect={logout}
           children={

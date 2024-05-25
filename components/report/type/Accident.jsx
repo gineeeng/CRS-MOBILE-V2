@@ -11,12 +11,14 @@ export default function Accident({ onChangeHandler }) {
         type={"number-pad"}
         onChangeHandler={onChangeHandler}
         keyName="numberOfCasualties"
+        defaultVal={"0"}
       />
       <InputField
         label="Number of injuries"
         type={"number-pad"}
         keyName="numberOfInjuries"
         onChangeHandler={onChangeHandler}
+        defaultVal="0"
       />
       <Dropdown
         label="Injury Severity"

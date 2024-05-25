@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { Colors } from "../../constants/Colors";
+import { useContext } from "react";
+import { ThemeContext } from "../../context/themeContext";
 
 export default function InputField({
   label,
@@ -7,14 +9,23 @@ export default function InputField({
   onChangeHandler,
   keyName,
   subKey = "",
+  placeholder = "",
+  defaultVal = "",
 }) {
+  const { colors } = useContext(ThemeContext);
   return (
     <View>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: colors.textColor }]}>{label}</Text>
       <TextInput
         keyboardType={type}
         onChangeText={(value) => onChangeHandler(keyName, value, subKey)}
-        style={styles.input}
+        style={[
+          styles.input,
+          { backgroundColor: colors.inputBgColor, color: colors.textColor },
+        ]}
+        placeholder={placeholder}
+        placeholderTextColor={colors.placeholderColor}
+        defaultValue={defaultVal}
       />
     </View>
   );

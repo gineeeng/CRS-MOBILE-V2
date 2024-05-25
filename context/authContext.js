@@ -3,8 +3,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
+import axios from "axios";
 
 export const AuthContext = createContext({
   user: null,
@@ -13,6 +15,8 @@ export const AuthContext = createContext({
   logout: () => {},
   authenticating: false,
   setAuthenticating: () => {},
+  setUser: () => {},
+  resendVerificationEmail: () => {},
 });
 
 export default function AuthContextProvider({ children }) {
@@ -21,13 +25,25 @@ export default function AuthContextProvider({ children }) {
   const [authenticating, setAuthenticating] = useState(true);
 
   async function signUp(email, password) {
-    const snapshot = await createUserWithEmailAndPassword(
+    const { user } = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    return { uid: snapshot.user.uid };
+
+    await sendEmailVerification(user);
+
+    return user;
   }
+
+  const resendVerificationEmail = async (user) => {
+    try {
+      await sendEmailVerification(user);
+      alert("Verification email resent.");
+    } catch (error) {
+      console.error("Error resending verification email:", error);
+    }
+  };
 
   async function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
@@ -42,8 +58,20 @@ export default function AuthContextProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setUser(user);
+          await axios({
+            method: "put",
+            url: `https://${process.env.EXPO_PUBLIC_API_URL}/api/users/${user.uid}`,
+            data: { email: user.email },
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      } else {
+        setUser(user);
+      }
       setLoading(false);
       setAuthenticating(false);
     });
@@ -53,11 +81,13 @@ export default function AuthContextProvider({ children }) {
 
   const value = {
     user,
+    setUser,
     signUp,
     login,
     logout,
     authenticating,
     setAuthenticating,
+    resendVerificationEmail,
   };
 
   return (

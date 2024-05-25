@@ -38,3 +38,7 @@ yarn-error.*
 #build
 %ProgramData%
 area.json
+
+#folder
+revision
+notes.txt
