@@ -12,7 +12,7 @@ import { Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function MenuBtn() {
-  const { logout } = useContext(AuthContext);
+  // const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
 
   return (
@@ -41,7 +41,7 @@ export default function MenuBtn() {
             </View>
           }
         />
-        <MenuOption
+        {/* <MenuOption
           onSelect={logout}
           children={
             <View
@@ -55,7 +55,7 @@ export default function MenuBtn() {
               <Text style={{ color: Colors.primary400 }}>Logout</Text>
             </View>
           }
-        />
+        /> */}
       </MenuOptions>
     </Menu>
   );

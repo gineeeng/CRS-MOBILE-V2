@@ -3,7 +3,7 @@ import { severityLevels } from "../../../util/reportData";
 import Dropdown from "../Dropdown";
 import InputField from "../InputField";
 
-export default function Accident({ onChangeHandler }) {
+export default function Accident({ onChangeHandler, data, dropdownRef }) {
   return (
     <View style={styles.container}>
       <InputField
@@ -12,6 +12,7 @@ export default function Accident({ onChangeHandler }) {
         onChangeHandler={onChangeHandler}
         keyName="numberOfCasualties"
         defaultVal={"0"}
+        value={data.numberOfCasualties}
       />
       <InputField
         label="Number of injuries"
@@ -19,8 +20,10 @@ export default function Accident({ onChangeHandler }) {
         keyName="numberOfInjuries"
         onChangeHandler={onChangeHandler}
         defaultVal="0"
+        value={data.numberOfInjuries}
       />
       <Dropdown
+        dropdownRef={dropdownRef}
         label="Injury Severity"
         options={severityLevels}
         onChangeHandler={onChangeHandler}

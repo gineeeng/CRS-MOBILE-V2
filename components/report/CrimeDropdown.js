@@ -12,6 +12,7 @@ export default function CrimeDropdown({
   keyName,
   subKey = "",
   listen,
+  dropdownRef,
 }) {
   const { colors } = useContext(ThemeContext);
   useEffect(() => {
@@ -21,10 +22,10 @@ export default function CrimeDropdown({
     <View style={styles.container}>
       <Text style={[styles.label, { color: colors.textColor }]}>{label}</Text>
       <SelectDropdown
+        ref={dropdownRef}
         defaultValue={options[0]}
         data={options}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem);
           onChangeHandler(keyName, selectedItem, subKey);
         }}
         renderDropdownIcon={() => (

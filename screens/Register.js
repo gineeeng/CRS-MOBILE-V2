@@ -89,7 +89,6 @@ export default function Register({ navigation }) {
         );
 
         userDetail.id = uid;
-        console.log("register: ", uid);
 
         const data = await axios({
           method: "post",
@@ -99,7 +98,6 @@ export default function Register({ navigation }) {
         });
 
         navigation.replace("Verification");
-        console.log(data.status);
       } catch (error) {
         console.log(error);
         authCtx.logout();

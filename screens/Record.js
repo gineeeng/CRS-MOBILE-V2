@@ -13,41 +13,49 @@ function ReportCard({ reportType, type, actionStatus, date, reportedDate }) {
   return (
     <>
       <View style={{ marginVertical: 8 }}>
-        <Text style={{ color: colors.textColor }}>
-          <Text>
+        <View>
+          <Text style={{ color: colors.textColor }}>
             <Text style={{ fontWeight: "bold" }}>Report Type:</Text>{" "}
             {reportType}
           </Text>
-          <Text>
+          <Text style={{ color: colors.textColor }}>
             <Text style={{ fontWeight: "bold" }}>Type:</Text> {type}
           </Text>
-          <Text>
+          <Text style={{ color: colors.textColor }}>
             <Text style={{ fontWeight: "bold" }}>Status:</Text>{" "}
             <Text
               style={{
                 color:
-                  actionStatus === "Pending"
+                  actionStatus === "Under Investigation"
                     ? "orange"
                     : actionStatus === "Solved"
                     ? "green"
-                    : "red",
+                    : actionStatus === "Case Closed"
+                    ? "blue"
+                    : "#808080",
               }}
             >
               {actionStatus}
             </Text>
           </Text>
-          <Text>
+          <Text style={{ color: colors.textColor }}>
             <Text style={{ fontWeight: "bold" }}>Date of Incident: </Text>{" "}
             {incidentDate[0]}, {incidentDate[1]} at {incidentDate[2]}
           </Text>
-          <Text>
+          <Text style={{ color: colors.textColor }}>
             <Text style={{ fontWeight: "bold" }}>Date Reported: </Text>{" "}
             {dateReported[0]}, {dateReported[1]} at {dateReported[2]}
           </Text>
-        </Text>
+        </View>
       </View>
       <View
-        style={{ borderWidth: 0.5, flex: 1, opacity: 0.2, marginVertical: 8 }}
+        style={{
+          borderWidth: 0.5,
+          borderColor: colors.textColor,
+          flex: 1,
+          opacity: 0.2,
+          marginVertical: 8,
+        }}
       ></View>
     </>
   );
@@ -76,10 +84,13 @@ export default function Record() {
   useEffect(() => {
     getReportsHistory();
 
-    setInterval(() => {
-      console.log("refetch");
+    const intervalId = setInterval(() => {
       getReportsHistory();
     }, 2000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
 
     // console.log(user.uid);
     // console.log("Connecting to WebSocket...");

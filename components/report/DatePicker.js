@@ -7,7 +7,12 @@ import { useContext, useState } from "react";
 import { format, parseISO } from "date-fns";
 import { ThemeContext } from "../../context/themeContext";
 
-export default function DatePicker({ keyName, setUserInput }) {
+export default function DatePicker({
+  keyName,
+  setUserInput,
+  dateTime,
+  setDateTime,
+}) {
   const { colors } = useContext(ThemeContext);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -15,11 +20,8 @@ export default function DatePicker({ keyName, setUserInput }) {
 
   const [dateValue, setDateValue] = useState(new Date());
 
-  const [dateTime, setDateTime] = useState("");
-
   const onChangeDateHandler = (event, selectedDate) => {
     setShowDatePicker(false);
-    console.log(selectedDate);
     if (event.type === "set") {
       setDateValue(selectedDate);
       setShowTimePicker(true);
@@ -35,7 +37,6 @@ export default function DatePicker({ keyName, setUserInput }) {
 
       const finalDate = parseISO(`${datePart}T${timePart}`);
       setDateTime(format(finalDate, "MMMM dd, yyyy, hh:mm a"));
-      console.log(finalDate);
 
       setUserInput((prev) => ({
         ...prev,
@@ -46,7 +47,9 @@ export default function DatePicker({ keyName, setUserInput }) {
 
   return (
     <View style={{ marginTop: 16 }}>
-      <Text style={styles.label}>When did the incident occur?</Text>
+      <Text style={[styles.label, { color: colors.textColor }]}>
+        When did the incident occur?
+      </Text>
       <View style={styles.container}>
         <Pressable
           style={[styles.dateInput, { backgroundColor: colors.inputBgColor }]}

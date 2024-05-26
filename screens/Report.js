@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -79,15 +79,24 @@ export default function Report() {
       municipality: "Dagupan City",
     },
     date: "",
-    numberOfCasualties: 0,
-    numberOfInjuries: 0,
+    numberOfCasualties: "0",
+    numberOfInjuries: "0",
     injurySeverity: "Minor",
     userId: authCtx.user.uid,
     action_status: "Under Investigation",
   };
 
   const [reportDetails, setReportDetails] = useState(defaultReportDetails);
+  const [dateTime, setDateTime] = useState("");
   const [errors, setErrors] = useState(null);
+
+  const reportTypeRef = useRef(null);
+  const crimeTypeRef = useRef(null);
+  const murderTypeRef = useRef(null);
+  const injurySeverityRef = useRef(null);
+  const barangayRef = useRef(null);
+  const streetRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState([]);
@@ -181,8 +190,20 @@ export default function Report() {
         data: reportDetails,
         headers: { "Content-Type": "application/json" },
       });
+      setReportDetails(defaultReportDetails);
+      setDateTime("");
+      setImages([]);
+      setVideoPreview([]);
+      setVideos([]);
+
+      reportTypeRef.current?.reset();
+      crimeTypeRef.current?.reset();
+      murderTypeRef.current?.reset();
+      injurySeverityRef.current?.reset();
+      barangayRef.current?.reset();
+      streetRef.current?.reset();
+      dropdownRef.current?.reset();
       Alert.alert("Success", "Your report has been submitted");
-      console.log(data);
     } catch (error) {
       Alert.alert("Submit failed", error.response.data.error);
     }
@@ -194,6 +215,7 @@ export default function Report() {
       case "Crime":
         return (
           <CrimeDropdown
+            dropdownRef={crimeTypeRef}
             label="Crime Type"
             options={crimes}
             onChangeHandler={onChangeHandler}
@@ -204,6 +226,7 @@ export default function Report() {
       case "Accident":
         return (
           <CrimeDropdown
+            dropdownRef={crimeTypeRef}
             label="Accident Type"
             options={accidentTypes}
             onChangeHandler={onChangeHandler}
@@ -214,6 +237,7 @@ export default function Report() {
       case "Hazards":
         return (
           <CrimeDropdown
+            dropdownRef={crimeTypeRef}
             label="Hazard Type"
             options={hazardList}
             onChangeHandler={onChangeHandler}
@@ -224,6 +248,7 @@ export default function Report() {
       case "Arson/Fire":
         return (
           <CrimeDropdown
+            dropdownRef={crimeTypeRef}
             label="Arson/Fire Type"
             options={arsonFireTypes}
             onChangeHandler={onChangeHandler}
@@ -261,6 +286,7 @@ export default function Report() {
     <ScrollView style={{ paddingTop: 25, backgroundColor: colors.bgPrimary }}>
       <View style={[styles.rootConainer]}>
         <Dropdown
+          dropdownRef={reportTypeRef}
           label="Report Type"
           options={reportType}
           onChangeHandler={onChangeHandler}
@@ -270,16 +296,22 @@ export default function Report() {
         {reportDetails.type === "Murder" &&
           reportDetails.reportType === "Crime" && (
             <Dropdown
+              dropdownRef={murderTypeRef}
               label="Murder type"
               options={murderTypes}
               onChangeHandler={onChangeHandler}
               keyName="murderType"
             />
           )}
-        <Accident onChangeHandler={onChangeHandler} />
+        <Accident
+          data={reportDetails}
+          onChangeHandler={onChangeHandler}
+          dropdownRef={injurySeverityRef}
+        />
         {/* <TextArea label="Description" onChangeHanlder={onChangeHandler} /> */}
         <View>
           <Dropdown
+            dropdownRef={barangayRef}
             label="Barangay"
             options={locationOptions}
             onChangeHandler={onChangeHandler}
@@ -288,6 +320,7 @@ export default function Report() {
           />
 
           <Dropdown
+            dropdownRef={streetRef}
             label="Street"
             options={[
               "akasia",
@@ -304,9 +337,17 @@ export default function Report() {
             subKey="street"
           />
         </View>
-        <DatePicker setUserInput={setReportDetails} keyName={"date"} />
+        <DatePicker
+          setUserInput={setReportDetails}
+          keyName={"date"}
+          dateTime={dateTime}
+          setDateTime={setDateTime}
+        />
         <View style={styles.uploadBtn}>
           <InfoTooltip />
+          <Text style={{ color: colors.textColor, fontSize: 18, opacity: 0.8 }}>
+            Optional
+          </Text>
           <UploadMedia
             onPressHandler={pickImages.bind(
               this,

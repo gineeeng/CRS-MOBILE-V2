@@ -20,8 +20,6 @@ const firebaseConfig = {
     "https://crime-reporting-system-2b1ea-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
-console.log(process.env.EXPO_PUBLIC_API_KEY);
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

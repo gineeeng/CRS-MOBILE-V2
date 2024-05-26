@@ -29,7 +29,6 @@ export default function Login({ navigation }) {
     setAuthenticating(true);
     try {
       const { user } = await login(userInput.email, userInput.password);
-      console.log(user);
     } catch (error) {
       Alert.alert("Can't log you in", authError(error.code));
       console.log(error.code);

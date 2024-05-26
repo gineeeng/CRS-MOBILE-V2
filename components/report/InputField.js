@@ -11,12 +11,14 @@ export default function InputField({
   subKey = "",
   placeholder = "",
   defaultVal = "",
+  value,
 }) {
   const { colors } = useContext(ThemeContext);
   return (
     <View>
       <Text style={[styles.label, { color: colors.textColor }]}>{label}</Text>
       <TextInput
+        value={value}
         keyboardType={type}
         onChangeText={(value) => onChangeHandler(keyName, value, subKey)}
         style={[

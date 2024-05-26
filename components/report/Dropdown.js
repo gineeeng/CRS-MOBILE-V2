@@ -11,6 +11,7 @@ export default function Dropdown({
   onChangeHandler,
   keyName,
   subKey = "",
+  dropdownRef,
 }) {
   const { colors } = useContext(ThemeContext);
 
@@ -21,10 +22,10 @@ export default function Dropdown({
     <View style={styles.container}>
       <Text style={[styles.label, { color: colors.textColor }]}>{label}</Text>
       <SelectDropdown
+        ref={dropdownRef}
         defaultValue={options[0]}
         data={options}
         onSelect={(selectedItem, index) => {
-          console.log(selectedItem);
           onChangeHandler(keyName, selectedItem, subKey);
         }}
         renderDropdownIcon={() => (
